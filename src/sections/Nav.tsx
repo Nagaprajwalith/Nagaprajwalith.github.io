@@ -48,8 +48,16 @@ export function Nav() {
     return () => io.disconnect()
   }, [])
 
-  const narrow = typeof window !== 'undefined' && window.innerWidth < 480
-  const btn = 'grid h-full w-full place-items-center rounded-full transition-colors'
+  // Re-checked on resize/rotation, not just once at load
+  const [narrow, setNarrow] = useState(() => typeof window !== 'undefined' && matchMedia('(max-width: 479px)').matches)
+  useEffect(() => {
+    const mq = matchMedia('(max-width: 479px)')
+    const onChange = () => setNarrow(mq.matches)
+    mq.addEventListener('change', onChange)
+    return () => mq.removeEventListener('change', onChange)
+  }, [])
+  // The ::after layer stretches the tap area over the whole dock circle (the icon's padding isn't clickable otherwise)
+  const btn = "relative grid h-full w-full place-items-center rounded-full transition-colors after:absolute after:-inset-[9px] after:rounded-full after:content-['']"
 
   return (
     <motion.nav
@@ -60,8 +68,8 @@ export function Nav() {
       transition={{ delay: 1.2, type: 'spring', stiffness: 120, damping: 16 }}
     >
       <Dock
-        iconSize={narrow ? 34 : 40}
-        iconMagnification={narrow ? 34 : 58}
+        iconSize={narrow ? 38 : 40}
+        iconMagnification={narrow ? 38 : 58}
         disableMagnification={narrow}
         className="mt-0 h-[52px] gap-1 sm:h-[58px] sm:gap-1.5 border-ink/10 bg-surface/70 px-2 backdrop-blur-md supports-backdrop-blur:bg-surface/60"
       >

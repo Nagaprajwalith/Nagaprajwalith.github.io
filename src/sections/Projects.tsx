@@ -55,7 +55,7 @@ function FlipCard({ project, index }: { project: Project; index: number }) {
               </div>
               <button
                 onClick={() => setFlipped(true)}
-                className="mt-6 inline-flex items-center gap-2 text-sm text-white/60 hover:text-white"
+                className="relative mt-6 inline-flex items-center gap-2 text-sm text-white/60 after:absolute after:-inset-3 after:content-[''] hover:text-white"
               >
                 <MousePointerClick className="h-4 w-4" /> {canHover ? 'Hover or click to flip' : 'Tap to see details'}
               </button>
@@ -119,7 +119,7 @@ export function Projects() {
         ))}
       </div>
       <Reveal className="mt-12 text-center">
-        <a href={PROFILE.github} target="_blank" rel="noopener" className="inline-flex items-center gap-2 text-ink/70 underline decoration-teal-400/60 decoration-2 underline-offset-8 hover:text-ink">
+        <a href={PROFILE.github} target="_blank" rel="noopener" className="relative inline-flex items-center gap-2 text-ink/70 after:absolute after:-inset-x-2 after:-inset-y-3 after:content-[''] underline decoration-teal-400/60 decoration-2 underline-offset-8 hover:text-ink">
           More on my GitHub <ArrowUpRight className="h-4 w-4" />
         </a>
       </Reveal>

@@ -192,14 +192,14 @@ function DdlDemo() {
             <button
               key={l}
               onClick={() => setDelta(i === 1)}
-              className={cn('relative rounded-full px-3 py-1.5 transition-colors', delta === (i === 1) ? 'text-[var(--bg)]' : 'text-ink/60 hover:text-ink')}
+              className={cn('relative rounded-full px-3 py-1.5 transition-colors after:absolute after:inset-x-0 after:-inset-y-2 after:content-[""]', delta === (i === 1) ? 'text-[var(--bg)]' : 'text-ink/60 hover:text-ink')}
             >
               {delta === (i === 1) && <motion.span layoutId="ddl-pill" className="absolute inset-0 rounded-full bg-ink" transition={{ type: 'spring', stiffness: 400, damping: 30 }} />}
               <span className="relative">{l}</span>
             </button>
           ))}
         </div>
-        <button onClick={() => setDelta((d) => !d)} className="inline-flex items-center gap-1.5 text-xs text-ink/60 hover:text-ink">
+        <button onClick={() => setDelta((d) => !d)} className="relative inline-flex items-center gap-1.5 text-xs text-ink/60 after:absolute after:-inset-3 after:content-[''] hover:text-ink">
           <ArrowRightLeft className="h-3.5 w-3.5" /> Convert
         </button>
       </div>
@@ -428,7 +428,9 @@ export function Experience() {
       </Reveal>
       <div className="grid gap-4 lg:grid-cols-2">
         {TOOLS_BUILT.map((t, i) => (
-          <Reveal key={t.title} delay={i * 0.08} className="h-full">
+          // min-w-0: a grid item won't shrink below its widest content by default, so the long DDL lines
+          // pushed this card past the screen edge on phones; now the code box scrolls inside the card
+          <Reveal key={t.title} delay={i * 0.08} className="h-full min-w-0">
             <Card className="flex flex-col">
               <div className="flex items-center gap-3">
                 <span className="grid h-10 w-10 place-items-center rounded-xl bg-[color-mix(in_srgb,var(--teal)_14%,transparent)] text-[var(--teal)]">
