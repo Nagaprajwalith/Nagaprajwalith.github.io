@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#060918" />
+    <script>
+      // Pick the theme before first paint: saved choice, else the system setting
+      try {
+        var t = localStorage.getItem('theme')
+        if (t === 'dark' || (!t && matchMedia('(prefers-color-scheme: dark)').matches)) document.documentElement.classList.add('dark')
+      } catch (e) { document.documentElement.classList.add('dark') }
+    </script>
+    <meta name="description" content="Naga Prajwalith P, Data Engineer in Hyderabad. PySpark and Azure Databricks pipelines, ML and AI projects, skills and contact." />
+    <title>Naga Prajwalith P | Data Engineer</title>
+    <link rel="canonical" href="%SITE_URL%/" />
+    <meta name="author" content="Naga Prajwalith P" />
+    <!-- Link previews (LinkedIn, WhatsApp, X, Slack) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Naga Prajwalith P | Data Engineer" />
+    <meta property="og:description" content="Data Engineer at Vanna Infotech, building PySpark and Azure Databricks pipelines. AI & ML graduate with projects in finance, farming, road safety and forensics." />
+    <meta property="og:url" content="%SITE_URL%/" />
+    <meta property="og:image" content="%SITE_URL%/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Naga Prajwalith P | Data Engineer" />
+    <meta name="twitter:description" content="Data Engineer building PySpark and Azure Databricks pipelines, with an AI & ML background." />
+    <meta name="twitter:image" content="%SITE_URL%/og-image.png" />
+    <!-- Tells Google who this site is about -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Naga Prajwalith P",
+        "jobTitle": "Data Engineer",
+        "worksFor": { "@type": "Organization", "name": "Vanna Infotech" },
+        "email": "mailto:prajwalithp@gmail.com",
+        "address": { "@type": "PostalAddress", "addressLocality": "Hyderabad", "addressCountry": "IN" },
+        "alumniOf": "Neil Gogte Institute of Technology",
+        "knowsAbout": ["Machine Learning", "Python", "Data Analysis", "Flask", "AWS"],
+        "sameAs": ["https://github.com/Nagaprajwalith"]
+      }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400..800&family=Unbounded:wght@400..800&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

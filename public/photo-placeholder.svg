@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="800" viewBox="0 0 600 800">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2dd4bf"/>
+      <stop offset=".55" stop-color="#7c3aed"/>
+      <stop offset="1" stop-color="#f59e0b"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="800" fill="url(#bg)" opacity=".35"/>
+  <circle cx="300" cy="300" r="120" fill="#ffffff" opacity=".22"/>
+  <path d="M90 800c0-140 94-250 210-250s210 110 210 250z" fill="#ffffff" opacity=".22"/>
+  <text x="300" y="330" text-anchor="middle" font-family="Arial, sans-serif" font-size="96" font-weight="700" fill="#ffffff" opacity=".9">NP</text>
+</svg>
