@@ -130,6 +130,8 @@ export type Job = {
   summary: string
   points: string[]
   stack: string[]
+  // Problem → what I did → result, shown instead of the bullet points when present
+  caseStudy?: { problem: string; did: string; result: string }
 }
 
 export const EXPERIENCE: Job[] = [
@@ -164,6 +166,11 @@ export const EXPERIENCE: Job[] = [
       'Built a foundation in data governance, access control and cloud data security',
     ],
     stack: ['Cyera', 'DSPM', 'Data classification', 'Access control'],
+    caseStudy: {
+      problem: 'Sensitive data spreads across cloud environments, and it is hard to see where it lives or who can reach it.',
+      did: 'Used Cyera to discover, classify and monitor sensitive data across simulated cloud environments, flagging over-exposed data and excessive access permissions.',
+      result: 'Prioritised the fixes by risk, and came away with a foundation in data governance, access control and cloud data security.',
+    },
   },
 ]
 

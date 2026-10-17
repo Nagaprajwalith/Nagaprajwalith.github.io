@@ -1,12 +1,12 @@
 import { AnimatePresence, motion, useInView } from 'motion/react'
-import { BarChart3, Building2, Crown, Database, GitBranch, Layers, ShieldCheck, Sparkles, Wand2, ArrowRightLeft, Check } from 'lucide-react'
+import { BarChart3, Building2, Crown, Database, GitBranch, Layers, ShieldCheck, Sparkles, Wand2, ArrowRightLeft, Check, MousePointerClick } from 'lucide-react'
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { EXPERIENCE, TOOLS_BUILT } from '@/data'
 import { useLite } from '@/lib/lite'
 import { cn } from '@/lib/utils'
 import { SkillIcon } from '@/skill-icons'
 import { NumberTicker } from '@/components/ui/number-ticker'
-import { Reveal, Section, SectionHeading, scrollToId } from './shared'
+import { Reveal, Section, SectionHeading } from './shared'
 
 /* ---------- Medallion pipeline ---------- */
 
@@ -286,11 +286,19 @@ function duration(start: string, end?: string) {
   return [y && `${y} yr${y > 1 ? 's' : ''}`, m && `${m} mo${m > 1 ? 's' : ''}`].filter(Boolean).join(' ')
 }
 
-// Industry program, then the full-time role, drawn as one continuous track
-function CareerTrack() {
+// Industry program, then the full-time role, drawn as one continuous track; each step is a tab for its role
+function CareerTrack({ active, onSelect }: { active: number; onSelect: (i: number) => void }) {
   const steps = [...EXPERIENCE].reverse()
+  const indexOf = (j: (typeof EXPERIENCE)[number]) => EXPERIENCE.indexOf(j)
+  const onKey = (e: React.KeyboardEvent) => {
+    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight' && e.key !== 'ArrowUp' && e.key !== 'ArrowDown') return
+    e.preventDefault()
+    const next = active === 0 ? 1 : 0
+    onSelect(next)
+    document.getElementById(`role-tab-${next}`)?.focus()
+  }
   return (
-    <div className="relative mb-10 grid gap-2 md:grid-cols-2 md:gap-0">
+    <div role="tablist" aria-label="Roles" onKeyDown={onKey} className="relative mb-3 grid gap-2 md:grid-cols-2 md:gap-0">
       <motion.div
         aria-hidden
         className="absolute left-[20px] top-[23px] hidden h-[2px] origin-left bg-gradient-to-r from-ink/20 to-[var(--teal)] md:block"
@@ -300,11 +308,21 @@ function CareerTrack() {
         viewport={{ once: true, margin: '-80px' }}
         transition={{ duration: 1.1, ease: [0.65, 0, 0.35, 1], delay: 0.2 }}
       />
-      {steps.map((j, i) => (
+      {steps.map((j, i) => {
+        const selected = indexOf(j) === active
+        return (
         <Reveal key={j.org} delay={0.15 + i * 0.35}>
           <button
-            onClick={() => scrollToId(j.current ? 'job-card' : 'program-card')}
-            className="flex w-full items-start gap-4 rounded-2xl p-2 text-left transition hover:bg-ink/[0.04] md:flex-col md:gap-3"
+            id={`role-tab-${indexOf(j)}`}
+            role="tab"
+            aria-selected={selected}
+            aria-controls="role-panel"
+            tabIndex={selected ? 0 : -1}
+            onClick={() => onSelect(indexOf(j))}
+            className={cn(
+              'flex w-full items-start gap-4 rounded-2xl border p-3 text-left transition md:flex-col md:gap-3',
+              selected ? 'border-ink/10 bg-ink/[0.05]' : 'border-transparent opacity-60 hover:bg-ink/[0.03] hover:opacity-100',
+            )}
           >
             <span
               className={cn(
@@ -326,8 +344,28 @@ function CareerTrack() {
             </span>
           </button>
         </Reveal>
-      ))}
+        )
+      })}
     </div>
+  )
+}
+
+function CaseStudy({ problem, did, result }: { problem: string; did: string; result: string }) {
+  return (
+    <dl className="space-y-3 text-[15px] leading-relaxed">
+      <div>
+        <dt className="text-sm font-semibold text-ink/50">The problem</dt>
+        <dd className="text-ink/75">{problem}</dd>
+      </div>
+      <div>
+        <dt className="text-sm font-semibold text-ink/50">What I did</dt>
+        <dd className="text-ink/75">{did}</dd>
+      </div>
+      <div className="rounded-xl border-l-[3px] border-[var(--teal)] bg-[color-mix(in_srgb,var(--teal)_8%,transparent)] px-4 py-2.5">
+        <dt className="text-sm font-semibold text-[var(--teal)]">The result</dt>
+        <dd className="font-medium text-ink/90">{result}</dd>
+      </div>
+    </dl>
   )
 }
 
@@ -342,6 +380,7 @@ function Stat({ big, label }: { big: ReactNode; label: string }) {
 
 export function Experience() {
   const [job, training] = EXPERIENCE
+  const [active, setActive] = useState(0) // index into EXPERIENCE: 0 = current job, 1 = DSPM program
   const toolVisuals = [<Lineage key="l" />, <DdlDemo key="d" />]
   const toolIcons = [<GitBranch key="l" className="h-5 w-5" />, <Wand2 key="d" className="h-5 w-5" />]
 
@@ -350,13 +389,29 @@ export function Experience() {
       <SectionHeading
         label="Experience"
         title={<>Where I've <span className="text-gradient">worked.</span></>}
-        intro="An industry program in data security, then a full-time data engineering role."
+        intro="I started in data security, learning how sensitive data is found and protected. Now I build the pipelines that move enterprise data to the cloud."
       />
 
-      <CareerTrack />
+      <CareerTrack active={active} onSelect={setActive} />
+      <p className="mb-8 flex items-center gap-2 px-3 text-xs text-ink/50">
+        <MousePointerClick className="h-3.5 w-3.5" /> 2 roles. Pick one to see the details.
+      </p>
 
+      <AnimatePresence mode="wait" initial={false}>
+      <motion.div
+        key={active}
+        id="role-panel"
+        role="tabpanel"
+        aria-labelledby={`role-tab-${active}`}
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -8 }}
+        transition={{ duration: 0.3, ease: [0.2, 0.8, 0.2, 1] }}
+      >
+      {active === 0 ? (
+      <>
       <Reveal>
-        <div id="job-card" className="scroll-mt-6">
+        <div>
           <Card className="relative overflow-hidden">
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div className="flex items-start gap-4">
@@ -457,9 +512,10 @@ export function Experience() {
           </Reveal>
         ))}
       </div>
-
-      <Reveal className="mt-14">
-        <div id="program-card" className="scroll-mt-6">
+      </>
+      ) : (
+      <Reveal>
+        <div>
           <Card>
             <div className="grid items-center gap-8 md:grid-cols-[1.3fr_1fr]">
               <div>
@@ -478,19 +534,32 @@ export function Experience() {
                 <p className="mt-3 text-ink/75">
                   {training.org}. {training.summary}
                 </p>
-                <ul className="mt-5 space-y-2.5">
-                  {training.points.map((p) => (
-                    <li key={p} className="flex gap-3 text-sm leading-relaxed text-[var(--muted)]">
-                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-[var(--teal)]" /> {p}
-                    </li>
-                  ))}
-                </ul>
+                <div className="mt-6">
+                  {training.caseStudy ? (
+                    <CaseStudy {...training.caseStudy} />
+                  ) : (
+                    <ul className="space-y-2.5">
+                      {training.points.map((p) => (
+                        <li key={p} className="flex gap-3 text-sm leading-relaxed text-[var(--muted)]">
+                          <Check className="mt-0.5 h-4 w-4 shrink-0 text-[var(--teal)]" /> {p}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+                <div className="mt-6">
+                  <p className="mb-3 text-sm text-ink/55">Tools and concepts</p>
+                  <Chips items={training.stack} />
+                </div>
               </div>
               <ScanVisual />
             </div>
           </Card>
         </div>
       </Reveal>
+      )}
+      </motion.div>
+      </AnimatePresence>
     </Section>
   )
 }
