@@ -1,5 +1,3 @@
-import { motion, type MotionStyle, type Transition } from "motion/react"
-
 import { cn } from "@/lib/utils"
 
 interface BorderBeamProps {
@@ -23,10 +21,6 @@ interface BorderBeamProps {
    * The color of the border beam to.
    */
   colorTo?: string
-  /**
-   * The motion transition of the border beam.
-   */
-  transition?: Transition
   /**
    * The class name of the border beam.
    */
@@ -56,7 +50,6 @@ export const BorderBeam = ({
   duration = 6,
   colorFrom = "#ffaa40",
   colorTo = "#9c40ff",
-  transition,
   style,
   reverse = false,
   initialOffset = 0,
@@ -71,9 +64,10 @@ export const BorderBeam = ({
         } as React.CSSProperties
       }
     >
-      <motion.div
+      {/* Animated in CSS (.border-beam-dot in index.css) so it can pause while the page scrolls */}
+      <div
         className={cn(
-          "absolute aspect-square",
+          "border-beam-dot absolute aspect-square",
           "bg-linear-to-l from-(--color-from) via-(--color-to) to-transparent",
           className
         )}
@@ -83,22 +77,12 @@ export const BorderBeam = ({
             offsetPath: `rect(0 auto auto 0 round ${size}px)`,
             "--color-from": colorFrom,
             "--color-to": colorTo,
+            animationDuration: `${duration}s`,
+            animationDelay: `${-(delay + (duration * initialOffset) / 100)}s`,
+            animationDirection: reverse ? "reverse" : "normal",
             ...style,
-          } as MotionStyle
+          } as React.CSSProperties
         }
-        initial={{ offsetDistance: `${initialOffset}%` }}
-        animate={{
-          offsetDistance: reverse
-            ? [`${100 - initialOffset}%`, `${-initialOffset}%`]
-            : [`${initialOffset}%`, `${100 + initialOffset}%`],
-        }}
-        transition={{
-          repeat: Infinity,
-          ease: "linear",
-          duration,
-          delay: -delay,
-          ...transition,
-        }}
       />
     </div>
   )

@@ -63,7 +63,7 @@ export function Nav() {
         iconSize={narrow ? 34 : 40}
         iconMagnification={narrow ? 34 : 58}
         disableMagnification={narrow}
-        className="mt-0 h-[52px] gap-1 sm:h-[58px] sm:gap-1.5 border-ink/10 bg-surface/70 px-2 backdrop-blur-xl supports-backdrop-blur:bg-surface/50"
+        className="mt-0 h-[52px] gap-1 sm:h-[58px] sm:gap-1.5 border-ink/10 bg-surface/70 px-2 backdrop-blur-md supports-backdrop-blur:bg-surface/60"
       >
         {SECTIONS.filter((s) => !narrow || s.phone !== false).map((s) => (
           <DockIcon key={s.id} className={cn(active === s.id ? 'bg-ink/10 text-ink' : 'text-ink/60 hover:text-ink')}>

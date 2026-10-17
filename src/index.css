@@ -131,6 +131,24 @@ body { transition: background-color .4s ease, color .4s ease; }
   animation: beam-travel linear infinite;
 }
 .beams-paused .beam { animation-play-state: paused; }
+
+/* Freeze effects that repaint every frame while the page scrolls (class set in App.tsx).
+   Transform-only animations such as the marquee keep running: they cost the compositor nothing. */
+.is-scrolling .beam,
+.is-scrolling .border-beam-dot,
+.is-scrolling .animate-meteor,
+.is-scrolling .animate-shiny-text,
+.is-scrolling .animate-shimmer-slide,
+.is-scrolling .animate-spin-around,
+.is-scrolling .pipe i,
+.is-scrolling .scanline { animation-play-state: paused; }
+
+/* Border beam: a light dot travelling around the card edge, as a CSS animation instead of a per-frame JS update */
+.border-beam-dot { animation: border-beam-travel linear infinite; }
+@keyframes border-beam-travel {
+  from { offset-distance: 0%; }
+  to { offset-distance: 100%; }
+}
 @keyframes beam-travel {
   to { stroke-dashoffset: 0; }
 }

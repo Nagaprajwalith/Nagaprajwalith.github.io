@@ -180,6 +180,12 @@ const SpotlightCard = ({
       const s = settingsRef.current;
       const dt = Math.min(0.05, Math.max(0.001, (now - last) / 1000));
       last = now;
+      // Hold the ambient drift while the page scrolls (see .is-scrolling): repainting the glow
+      // every frame competes with the scroll; it picks up again as soon as scrolling stops
+      if (!pointer.active && !focus && document.documentElement.classList.contains('is-scrolling')) {
+        raf = requestAnimationFrame(tick);
+        return;
+      }
       const rect = root.getBoundingClientRect();
       let tx = state.x;
       let ty = state.y;

@@ -37,6 +37,27 @@ export default function App() {
     }
   }, [])
 
+  // While the page is moving, pause the decorative paint-heavy animations (see .is-scrolling in index.css)
+  // so every frame goes to the scroll itself; they resume a moment after scrolling stops
+  useEffect(() => {
+    const root = document.documentElement
+    let timer = 0
+    const onScroll = () => {
+      if (!timer) root.classList.add('is-scrolling')
+      clearTimeout(timer)
+      timer = window.setTimeout(() => {
+        timer = 0
+        root.classList.remove('is-scrolling')
+      }, 160)
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      clearTimeout(timer)
+      root.classList.remove('is-scrolling')
+    }
+  }, [])
+
   return (
     <ClickSpark sparkColor={['#2dd4bf', '#8b5cf6', '#fbbf24']} sparkCount={10} sparkRadius={26} shape="star" className="min-h-svh">
       <Intro onDone={() => setReady(true)} />
