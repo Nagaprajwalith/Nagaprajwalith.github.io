@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import Lenis from 'lenis'
-import ClickSpark from '@/components/ClickSpark'
 import { ScrollProgress } from '@/components/ui/scroll-progress'
 import { Intro } from '@/sections/Intro'
 import { Hero } from '@/sections/Hero'
@@ -59,7 +58,7 @@ export default function App() {
   }, [])
 
   return (
-    <ClickSpark sparkColor={['#2dd4bf', '#8b5cf6', '#fbbf24']} sparkCount={10} sparkRadius={26} shape="star" className="min-h-svh">
+    <div className="min-h-svh">
       <Intro onDone={() => setReady(true)} />
       <ScrollProgress className="top-0 z-[70] h-[3px] bg-gradient-to-r from-teal-400 via-violet-500 to-amber-400" />
       <main>
@@ -75,6 +74,6 @@ export default function App() {
       {ready && <Nav />}
       <CommandMenu />
       <Toaster />
-    </ClickSpark>
+    </div>
   )
 }
